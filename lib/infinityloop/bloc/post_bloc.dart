@@ -25,6 +25,8 @@ class PostBloc extends Bloc<PostEvent, PostState> {
   Stream<PostState> mapEventToState(PostEvent event) async* {
     final currentState = state;
     if (event is FetchPost && !_hasReachedMax(currentState)) {
+      print("Initial called ========");
+
       try {
         if (currentState is PostInitialState) {
           final posts = await _fetchPosts(0, 20);
@@ -46,15 +48,25 @@ class PostBloc extends Bloc<PostEvent, PostState> {
       state is PostSuccessState && state.hasReachedMax;
 
   Future<List<Post>> _fetchPosts(int startIndex, int limit) async {
+    print("Called data api----------");
+
     final response = await httpClient.get(
         'https://jsonplaceholder.typicode.com/posts?_start=$startIndex&_limit=$limit');
-
+    print("Called data api----------: ${response.statusCode}");
     if (response.statusCode == 200) {
       final data = json.decode(response.body) as List;
-      return data.map((rawPost) {
+      print("Called data api----------: $data");
+      var result = List<Post>();
+      data.forEach((element) {
+        var post = Post(id: element['id'], title: element['title'], body: element['body']);
+        result.add(post);
+      });
+      /*return data.map((rawPost) {
         return Post(
             id: rawPost['id'], title: rawPost['title'], body: rawPost['body']);
-      });
+      });*/
+      print("Called data api----------: ${result.length}");
+      return result;
     } else {
       throw Exception('Error fetching post');
     }

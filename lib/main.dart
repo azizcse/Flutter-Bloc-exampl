@@ -5,11 +5,13 @@ import 'package:flutter_widgets/app.dart';
 import 'package:flutter_widgets/infinityloop/bloc/bloc.dart';
 import 'package:flutter_widgets/infinityloop/bloc/bloc_observer.dart';
 import 'package:flutter_widgets/infinityloop/bloc/post_bloc.dart';
+import 'package:flutter_widgets/infinityloop/bottom_loader.dart';
+import 'package:flutter_widgets/infinityloop/post_widget.dart';
 import 'package:http/http.dart' as http;
 
 void main() {
   Bloc.observer = SimpleBlocObserver();
-  runApp(App());
+  runApp(InfinityApp());
 }
 
 class InfinityApp extends StatelessWidget {
@@ -52,42 +54,36 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        child: BlocBuilder(builder: null),
-      ),
-    );
-    //
-    // return BlocBuilder<PostBloc, PostEvent>(builder: (context, state) {
-    //   if (state is PostInitialState) {
-    //     return Center(
-    //       child: CircularProgressIndicator(),
-    //     );
-    //   }
-    //   if (state is PostFailureState) {
-    //     return Center(
-    //       child: Text('failed to fetch posts'),
-    //     );
-    //   }
-    //
-    //   if (state is PostSuccessState) {
-    //     if (state.posts.isEmpty) {
-    //       return Center(
-    //         child: Text('No post'),
-    //       );
-    //     }
-    //     return ListView.builder(
-    //       itemBuilder: (BuildContext context, int index) {
-    //         return index >= state.posts.length
-    //             ? BottomLoader()
-    //             : PostWidget(post: state.posts[index]);
-    //       },
-    //       itemCount:
-    //           state.hasReachedMax ? state.posts.length : state.posts.length + 1,
-    //       controller: _scrollController,
-    //     );
-    //   }
-    // });
+    return BlocBuilder<PostBloc, PostState>(builder: (context, state) {
+      if (state is PostInitialState) {
+        return Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+      if (state is PostFailureState) {
+        return Center(
+          child: Text('failed to fetch posts'),
+        );
+      }
+
+      if (state is PostSuccessState) {
+        if (state.posts.isEmpty) {
+          return Center(
+            child: Text('No post'),
+          );
+        }
+        return ListView.builder(
+          itemBuilder: (BuildContext context, int index) {
+            return index >= state.posts.length
+                ? BottomLoader()
+                : PostWidget(post: state.posts[index]);
+          },
+          itemCount:
+              state.hasReachedMax ? state.posts.length : state.posts.length + 1,
+          controller: _scrollController,
+        );
+      }
+    });
   }
 
   @override
