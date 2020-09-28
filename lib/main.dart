@@ -7,11 +7,29 @@ import 'package:flutter_widgets/infinityloop/bloc/bloc_observer.dart';
 import 'package:flutter_widgets/infinityloop/bloc/post_bloc.dart';
 import 'package:flutter_widgets/infinityloop/bottom_loader.dart';
 import 'package:flutter_widgets/infinityloop/post_widget.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import 'getpackage/home_page.dart';
+
 void main() {
-  Bloc.observer = SimpleBlocObserver();
-  runApp(InfinityApp());
+  /*Bloc.observer = SimpleBlocObserver();
+  runApp(InfinityApp());*/
+
+  runApp(GetHome());
+}
+
+class GetHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return GetMaterialApp(
+      home: GetStateManage(),
+      theme: ThemeData(
+        accentColor: Colors.purpleAccent,
+        primaryColor: Colors.purple,
+      ),
+    );
+  }
 }
 
 class InfinityApp extends StatelessWidget {
