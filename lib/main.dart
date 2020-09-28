@@ -1,23 +1,46 @@
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_widgets/app.dart';
-import 'package:flutter_widgets/infinityloop/bloc/bloc.dart';
-import 'package:flutter_widgets/infinityloop/bloc/bloc_observer.dart';
-import 'package:flutter_widgets/infinityloop/bloc/post_bloc.dart';
-import 'package:flutter_widgets/infinityloop/bottom_loader.dart';
-import 'package:flutter_widgets/infinityloop/post_widget.dart';
+import 'package:flutter_widgets/getpackage/login/router.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:http/http.dart' as http;
 
 import 'getpackage/home_page.dart';
+
 
 void main() {
   /*Bloc.observer = SimpleBlocObserver();
   runApp(InfinityApp());*/
 
-  runApp(GetHome());
+  //runApp(GetHome());
+
+  //Login
+  WidgetsFlutterBinding.ensureInitialized();
+
+  runApp(
+    GetMaterialApp(
+      title: 'GetX App',
+      debugShowCheckedModeBanner: false,
+      defaultTransition:Transition.rightToLeft,
+      getPages: RouterLogin.route,
+      initialRoute: '/loginView',
+      theme: ThemeData(
+        primarySwatch: Colors.deepOrange,
+        appBarTheme: AppBarTheme(
+          color: Colors.deepOrange,
+          textTheme: TextTheme(
+            headline6: GoogleFonts.exo2(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ),
+      ),
+    ),
+  );
 }
+/*
 
 class GetHome extends StatelessWidget {
   @override
@@ -118,3 +141,4 @@ class _HomePageState extends State<HomePage> {
     }
   }
 }
+*/
